@@ -1,0 +1,9 @@
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+const db = {};
+db.mongoose = mongoose;
+db.user = require("./Users.model");
+db.product = require("./Product.model")
+db.orders = require("./orders.models");
+db.Cart = require("./Cart.model");
+module.exports=db;
