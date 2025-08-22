@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const config = require("../Config/auth.config.js")
 const db = require("../models/index.model.js");
-const User = db.User;
 
 verifyToken = (req, res, next) => {
   let token = req.session.token || req.headers["authorization"];
