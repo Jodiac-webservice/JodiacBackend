@@ -1,5 +1,5 @@
 const config = require("../config/auth.config");
-const db = require("../models/Index.model");
+const db = require("../models/index.model");
 const ConfirmOrder = db.orders
 
 exports.createOrder = async (req , res)=>{

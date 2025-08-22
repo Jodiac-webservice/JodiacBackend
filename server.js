@@ -17,7 +17,7 @@ app.use(
   })
 );
 
-const db = require("./models/Index.model");
+const db = require("./models/index.model");
 
 db.mongoose
   .connect(`mongodb+srv://jodiacwebservice:leFen5P4LDWiCDto@cluster0.fv8e3jd.mongodb.net/`,{
