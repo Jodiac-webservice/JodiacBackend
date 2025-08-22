@@ -1,5 +1,5 @@
 const db = require("../models/Index.model");
-const Product = db.product;
+const Product = db.Product;
 
 exports.Addproduct = async (req, res) => {
     try {

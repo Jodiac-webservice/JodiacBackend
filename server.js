@@ -17,7 +17,7 @@ app.use(
   })
 );
 
-const db = require("./models/index.model");
+const db = require("./models/Index.model");
 
 db.mongoose
   .connect(`mongodb+srv://jodiacwebservice:leFen5P4LDWiCDto@cluster0.fv8e3jd.mongodb.net/`,{
@@ -38,6 +38,9 @@ db.mongoose
 
   require("./Routes/Auth.Routes")(app);
   require("./Routes/Uploadproduct.Route")(app);
+  require("./Routes/Cart.Routes")(app);
+  require("./Routes/Shiping.Routes")(app);
+  require("./Routes/Orders.Routes")(app);
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {

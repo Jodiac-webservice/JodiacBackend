@@ -1,6 +1,6 @@
 const db = require("../models/Index.model");
 const Cart = db.Cart;
-const Product = db.product;
+const Product = db.Product;
 
 exports.AddToCart = async (req, res) => {
   const userId = req.userId;
@@ -64,15 +64,27 @@ exports.AddToCart = async (req, res) => {
 
   
 exports.getCart = async (req, res) => {
-    try {
-      const cart = await Cart.findOne({ userId: req.userId }).populate('products.productId');
-      if (!cart) return res.status(404).send({ message: 'Cart not found' });
-      res.status(200).send({ cart });
-    } catch (err) {
-      res.status(500).send({ message: 'Error fetching cart' });
+  try {
+    const cart = await Cart.findOne({ userId: req.userId })
+      .populate({
+        path: 'products.productId',  // Path to populate
+        select: 'name price images',  // Fields you want (update as needed)
+      });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
     }
-  };
-  exports.RemoveFromCart = async (req, res) => {
+
+    res.json({ cart });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+exports.RemoveFromCart = async (req, res) => {
     const userId = req.userId; 
     const { productId } = req.body;
 

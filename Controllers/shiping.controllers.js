@@ -1,11 +1,12 @@
 const db = require("../models/Index.model");
-const User = db.User;
+const User = db.user;
 const mongoose = require("mongoose");
 
 // Add Address
 exports.Addaddress = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+     const userId = req.userId; 
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

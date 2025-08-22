@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Product = mongoose.model(
-    "product",
+    "Product",
     new mongoose.Schema({
         name: {
             type: String,
