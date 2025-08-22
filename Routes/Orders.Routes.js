@@ -1,5 +1,5 @@
 const controller = require("../Controllers/Orders.Controllers");
-const {authJwt} = require("../middlewares/index");
+const {authJwt} = require("../Middlewares/index");
 
 module.exports = function(app) {
     app.use(function(req,res,next){
