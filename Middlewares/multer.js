@@ -1,52 +1,50 @@
 const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('cloudinary').v2;
+const streamifier = require('streamifier');
 
 cloudinary.config({
-    cloud_name: 'drces11yl',
-    api_key: '363267514528542',
-    api_secret: 'W1FmRbXnJYrGEyq1MgQ0-TuDruM'
-});
-
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: async (req, file) => {
-        const isVideo = file.mimetype.startsWith('video');
-        const folderName = isVideo ? 'videos' : 'products';
-        const resourceType = isVideo ? 'video' : 'image';
-        const format = isVideo ? 'mp4' : 'jpg';
-
-        return {
-            folder: folderName,
-            resource_type: resourceType,
-            public_id: file.originalname.split('.')[0],
-            format: format,
-            transformation: [{ quality: 'auto', fetch_format: 'auto' }]
-        };
-    }
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'drces11yl',
+  api_key: process.env.CLOUDINARY_API_KEY || '363267514528542',
+  api_secret: process.env.CLOUDINARY_API_SECRET || 'W1FmRbXnJYrGEyq1MgQ0-TuDruM',
 });
 
 const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 50 * 1024 * 1024 // 50 MB
-    },
-    fileFilter: (req, file, cb) => {
-        const allowedMimeTypes = [
-            'video/mp4',
-            'video/mpeg',
-            'video/quicktime',
-            'video/x-msvideo',
-            'image/jpeg',
-            'image/png',
-            'image/jpg'
-        ];
-        if (allowedMimeTypes.includes(file.mimetype)) {
-            cb(null, true);
-        } else {
-            cb(new Error('Only video and image files are allowed!'), false);
-        }
+  storage: multer.memoryStorage(), // store file in memory buffer
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
+  fileFilter: (req, file, cb) => {
+    const allowedMimeTypes = [
+      'video/mp4',
+      'video/mpeg',
+      'video/quicktime',
+      'video/x-msvideo',
+      'image/jpeg',
+      'image/png',
+      'image/jpg',
+    ];
+    if (allowedMimeTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only video and image files are allowed!'), false);
     }
+  },
 });
 
-module.exports = upload;
+// helper function to upload file buffer to Cloudinary
+const uploadToCloudinary = (fileBuffer, folderName, resourceType) => {
+  return new Promise((resolve, reject) => {
+    let stream = cloudinary.uploader.upload_stream(
+      {
+        folder: folderName,
+        resource_type: resourceType,
+        transformation: [{ quality: 'auto', fetch_format: 'auto' }],
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    streamifier.createReadStream(fileBuffer).pipe(stream);
+  });
+};
+
+module.exports = { upload, uploadToCloudinary };
