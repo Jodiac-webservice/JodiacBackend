@@ -37,7 +37,7 @@ db.mongoose
   });
 
   require("./Routes/Auth.Routes")(app);
-  require("./Routes/uploadproduct.Route")(app);
+  require("./Routes/uploadproduct.route")(app);
   require("./Routes/Cart.Routes")(app);
   require("./Routes/Shiping.Routes")(app);
   require("./Routes/Orders.Routes")(app);
