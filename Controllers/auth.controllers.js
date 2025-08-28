@@ -90,7 +90,7 @@ const mailOptions = {
 };
 exports.signin = async (req, res) => {
   try {
-    const { email, name, password } = req.body;
+    const { email, password } = req.body;
     const user = await User.findOne({email});
 
     if (!user) {
@@ -113,6 +113,7 @@ exports.signin = async (req, res) => {
       id: user._id,
       email: user.email,
       name: user.name,
+      role: user.role,
       accessToken: token,
     });
   } catch (err) {

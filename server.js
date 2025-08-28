@@ -41,6 +41,7 @@ db.mongoose
   require("./Routes/Cart.Routes")(app);
   require("./Routes/Shiping.Routes")(app);
   require("./Routes/Orders.Routes")(app);
+  require("./Routes/Admin.Routes")(app);
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
