@@ -18,6 +18,14 @@ const orderItemSchema = new mongoose.Schema({
     price: { 
         type: Number, 
         required: true 
+    },
+    color: {
+        type: String,
+        required: true
+    },
+    size: {
+        type: String,
+        required: true
     }
 });
 
