@@ -13,4 +13,6 @@ module.exports = function (app) {
   // Admin signup
   app.post("/api/auth/adminSignup", controller.adminSignup);
   app.get("/api/getActiveOrders", controller.getActiveOrders);
+  app.get("/api/getRevenueAndCost", controller.getRevenueAndCost);
+  app.get("/api/getRevenue", controller.getRevenue);
 };

@@ -41,6 +41,7 @@ exports.adminSignup = async (req, res) => {
     res.status(500).json({ message: "Something went wrong during admin registration." });
   }
 };
+
 exports.getActiveOrders = async (req, res) => {
   try {
     const activeOrders = await Orders.find({
@@ -56,5 +57,58 @@ exports.getActiveOrders = async (req, res) => {
     });
   } catch (err) {
     res.status(500).send({ message: err.message });
+  }
+};
+
+exports.getRevenueAndCost = async (req, res) => {
+  try {
+    const orders = await Orders.find({ orderStatus: "Delivered", isPaid: true });
+
+    let totalRevenue = 0;
+    let totalCost = 0;
+
+    orders.forEach(order => {
+      totalRevenue += order.totalAmount;
+
+      order.orderItems.forEach(item => {
+        if (item.cost) {
+          totalCost += item.cost * item.quantity;
+        }
+      });
+    });
+
+    const profitMargin =
+      totalRevenue > 0
+        ? ((totalRevenue - totalCost) / totalRevenue) * 100
+        : 0;
+
+    res.json({
+      success: true,
+      revenue: totalRevenue,
+      cost: totalCost,
+      profitMargin: profitMargin.toFixed(2),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.getRevenue = async (req, res) => {
+  try {
+    const orders = await Orders.find({ orderStatus: "Delivered", isPaid: true });
+
+    let totalRevenue = 0;
+    orders.forEach(order => {
+      totalRevenue += order.totalAmount;
+    });
+
+    res.json({
+      success: true,
+      totalRevenue,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
