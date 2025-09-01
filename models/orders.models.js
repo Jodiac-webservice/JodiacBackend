@@ -42,7 +42,7 @@ const confirmOrderSchema = new mongoose.Schema({
         name: { type: String, required: true },
         phone: { type: Number, required: true },
         streetAddress: { type: String, required: true },
-        Landmark: { type: String, required: true },
+        landmark: { type: String, required: true },
         city: { type: String, required: true },
         pincode: { type: Number, required: true },
         state: { type: String, required: true }
