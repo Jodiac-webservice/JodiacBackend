@@ -3,6 +3,9 @@ const cors = require('cors');
 const cookieSession = require('cookie-session');
 const axios = require('axios');
 
+require("dotenv").config();
+
+
 const app = express();
 
 app.use(cors());
@@ -42,6 +45,7 @@ db.mongoose
   require("./Routes/Shiping.Routes")(app);
   require("./Routes/Orders.Routes")(app);
   require("./Routes/Admin.Routes")(app);
+  require("./Routes/payment.Routes")(app);
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
