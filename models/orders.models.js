@@ -51,7 +51,7 @@ const confirmOrderSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
         required: true,
-        enum: ['Cash on Delivery', 'UPI', 'Card', 'Net Banking', 'Wallet']
+        enum: ['Cash on Delivery', "upi","UPI", 'Card',"card", 'Net Banking', 'Wallet']
     },
 
     paymentStatus: {

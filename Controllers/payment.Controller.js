@@ -32,10 +32,19 @@ exports.createOrder = async (req, res) => {
 
 exports.verifyPayment = async (req, res) => {
   try {
-    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, orderData, shippingAddress, userId, paymentMethod } = req.body;
+    const {
+      razorpay_payment_id,
+      razorpay_order_id,
+      razorpay_signature,
+      orderData,
+      shippingAddress,
+      userId,
+      paymentMethod,
+      totalAmount, // <-- include this
+    } = req.body;
 
-    if (!userId || !shippingAddress) {
-      return res.status(400).json({ success: false, message: "User ID and shipping address are required" });
+    if (!userId || !shippingAddress || !totalAmount) {
+      return res.status(400).json({ success: false, message: "User ID, shipping address, and totalAmount are required" });
     }
 
     const body = razorpay_order_id + "|" + razorpay_payment_id;
@@ -52,6 +61,7 @@ exports.verifyPayment = async (req, res) => {
         orderData,
         razorpayPaymentId: razorpay_payment_id,
         razorpayOrderId: razorpay_order_id,
+        totalAmount, // <-- add here
         status: "paid",
       });
 
