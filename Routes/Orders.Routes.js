@@ -10,12 +10,23 @@ module.exports = function(app) {
         next();
     });
 
-    // The fix is here:
-    // Ensure that you are passing a function as the last argument.
-    // Your previous code was correct, so this is just to confirm the structure.
     app.post(
-        "/api/Orders/createOrders", 
-        [authJwt.verifyToken], 
+        "/api/Orders/createOrders",
+        [authJwt.verifyToken],
         controller.createOrder
+    );
+
+    // Endpoint to get a list of all orders for the authenticated user
+    app.get(
+        "/api/orders",
+        [authJwt.verifyToken],
+        controller.getAllOrders
+    );
+
+    // Endpoint to get the status of a specific order
+    app.get(
+        "/api/Orders/status/:orderId",
+        [authJwt.verifyToken],
+        controller.getOrderStatus
     );
 };

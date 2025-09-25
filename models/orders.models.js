@@ -70,6 +70,17 @@ const confirmOrderSchema = new mongoose.Schema({
         default: 'Confirmed',
         enum: ['Confirmed', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled']
     },
+    awbCode:{
+        type: String, default: null
+    },
+    shiprocketOrderId: {
+        type: Number,
+        default: null
+    },
+    shiprocketAwbCode: {
+        type: String,
+        default: null
+    },
 
     isDelivered: {
         type: Boolean,
