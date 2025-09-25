@@ -2,7 +2,7 @@ const db = require("../models/index.model");
 const ConfirmOrder = db.orders;
 const { createShiprocketOrder } = require("../config/Shiproket.config");
 
-const createOrder = async (req, res) => {
+exports.createOrder = async (req, res) => {
     try {
         const userId = req.userId;
         const { orderItems, shippingAddress, paymentMethod, totalAmount } = req.body;
@@ -48,5 +48,3 @@ const createOrder = async (req, res) => {
         });
     }
 };
-
-module.exports = { createOrder };
