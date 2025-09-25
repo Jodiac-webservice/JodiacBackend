@@ -21,14 +21,13 @@ async function authenticateShiprocket() {
     );
 
     shiprocketToken = response.data.token;
-    // Calculate a new expiry time (e.g., 9.5 days to be safe)
-    const expiresInMinutes = 14400 - 360; // 10 days is 14400 minutes, subtracting 6 hours to be safe.
-    tokenExpiry = new Date(now.getTime() + expiresInMinutes * 60000); // Minutes * 60 * 1000
+    const expiresInMinutes = 14400 - 360; 
+    tokenExpiry = new Date(now.getTime() + expiresInMinutes * 60000); 
 
     return shiprocketToken;
   } catch (error) {
     console.error("Shiprocket Auth Failed:", error.response?.data || error.message);
-    throw new Error("Shiprocket authentication failed");
+   throw new Error("Shiprocket authentication failed");
   }
 }
 
