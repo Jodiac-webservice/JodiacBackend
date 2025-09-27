@@ -27,7 +27,6 @@ exports.createOrder = async (req, res) => {
             paymentMethod,
             totalAmount
         );
-        // Fix: Save the Shiprocket order ID and AWB number to your database
         createdOrder.shiprocketOrderId = shiprocketResponse.order_id;
         createdOrder.shiprocketAwbCode = shiprocketResponse.awb_code;
         await createdOrder.save();
@@ -48,27 +47,23 @@ exports.createOrder = async (req, res) => {
 exports.getAllOrders = async (req, res) => {
     try {
         const userId = req.userId;
-        
-        // Use .populate() to fetch details from the 'Product' model
         const orders = await ConfirmOrder.find({ userId })
             .populate({
                 path: 'orderItems.productId',
-                model: 'Product', // Ensure this matches your product model name
-                select: 'name images' // ✅ Use the correct field names from your Product model
+                model: 'Product',
+                select: 'name images' 
             })
             .sort({ createdAt: -1 });
             
         if (!orders) {
             return res.status(404).json({ message: "No orders found for this user." });
         }
-
-        // To make the frontend display easier, you might want to restructure the data
         const formattedOrders = orders.map(order => ({
             ...order.toObject(),
             orderItems: order.orderItems.map(item => ({
                 ...item.toObject(),
-                productName: item.productId?.name || null, // ✅ Map to the correct field
-                productImage: item.productId?.images?.[0] || null, // ✅ Map to the correct field (assuming you want the first image)
+                productName: item.productId?.name || null,
+                productImage: item.productId?.images?.[0] || null,
             }))
         }));
 
@@ -111,19 +106,14 @@ exports.getOrderStatus = async (req, res) => {
             17: "Cancelled",
             18: "Cancelled"
         };
-
-        // 3️⃣ Extract the correct nested data and map the status
         const shiprocketStatusCode = shiprocketResponse.data?.status_code || null;
         const awbCode = shiprocketResponse.data?.shipments?.awb || "N/A";
-
-        // ✅ Use the map to get the correct status, defaulting to "Unknown" if not found
         const currentStatus = shiprocketStatusMap[shiprocketStatusCode] || "Unknown"; 
         if (order.status !== currentStatus || order.awbCode !== awbCode) {
             order.status = currentStatus;
-            order.awbCode = awbCode; // You might need to add this field to your schema
-            await order.save(); // Save the updated order to the database
+            order.awbCode = awbCode; 
+            await order.save();
         }
-        // 4️⃣ Respond with the extracted and mapped details
         res.status(200).json({
             message: "Order status retrieved successfully",
             status: currentStatus,
