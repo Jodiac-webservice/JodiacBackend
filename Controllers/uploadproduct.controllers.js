@@ -23,8 +23,8 @@ exports.Addproduct = async (req, res) => {
             product: savedProduct
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
+        console.error("SERVER ERROR:", error);
+        res.status(500).json({ error: 'Server error', details: error.message });
     }
 };
 exports.updateproduct = async (req, res) => {
